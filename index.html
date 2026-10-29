@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#e8590c" />
+  <title>AURA BITE | Food Shop Billing & Management</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="upgrade.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- 1. ENTRY PORTAL (Role Selector) -->
+  <div class="portal-gateway" id="portalGateway">
+    <div class="gateway-card">
+      <div class="brand-hero">
+        <div class="brand-badge">A<span>✦</span></div>
+        <h1>AURA BITE</h1>
+        <p>GOOD FOOD • HAPPY MOOD</p>
+        <span class="location-tag">Baligori, Newtown, Kolkata 700160</span>
+      </div>
+
+      <div class="gateway-choices">
+        <button class="gateway-btn customer" id="btnChooseCustomer">
+          <div class="icon">🛍️</div>
+          <div>
+            <strong>Customer Online Menu</strong>
+            <span>Browse food, build tray & order via WhatsApp</span>
+          </div>
+          <span class="arr">→</span>
+        </button>
+
+        <button class="gateway-btn admin" id="btnChooseAdmin">
+          <div class="icon">🔒</div>
+          <div>
+            <strong>Staff & Admin Portal</strong>
+            <span>Counter billing, sales stats & menu editor</span>
+          </div>
+          <span class="arr">→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. ADMIN LOGIN MODAL -->
+  <div class="modal-backdrop" id="adminLoginModal">
+    <div class="modal auth-box">
+      <button class="modal-close" id="closeAdminLogin" aria-label="Close">×</button>
+      <span class="eyebrow">STAFF SECURE ACCESS</span>
+      <h2>Admin Login</h2>
+      <p class="modal-sub">Enter your staff credentials to access counter POS and store settings.</p>
+      <form id="adminLoginForm">
+        <label>
+          User ID
+          <input type="text" id="adminUser" required placeholder="Enter User ID" autocomplete="off" />
+        </label>
+        <label>
+          Password
+          <input type="password" id="adminPass" required placeholder="Enter Password" />
+        </label>
+        <button type="submit" class="primary-btn full-btn">Sign In <span>→</span></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. MAIN ADMIN POS SHELL -->
+  <div class="app-shell" id="appShell" style="display: none;">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">A<span>✦</span></div>
+        <div>
+          <div class="brand-name">AURA BITE</div>
+          <div class="brand-caption">GOOD FOOD • HAPPY MOOD</div>
+        </div>
+      </div>
+      
+      <div class="shop-mini">
+        <span class="status-dot"></span>
+        <span>Baligori, Newtown</span>
+      </div>
+
+      <nav class="nav-list">
+        <button class="nav-link active" data-view="dashboard"><span>▦</span> Dashboard</button>
+        <button class="nav-link" data-view="billing"><span>＋</span> New Bill (Counter)</button>
+        <button class="nav-link" data-view="bills"><span>▤</span> Saved Invoices</button>
+        <button class="nav-link" data-view="products"><span>◈</span> Menu & Items</button>
+        <button class="nav-link" data-view="orders"><span>🛍</span> Customer Order Link</button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="side-promo">
+          <div class="promo-icon">✦</div>
+          <b>Student Combos</b>
+          <p>Fresh & fast bites crafted for busy campus days.</p>
+        </div>
+        <div class="side-contact">
+          <span>☎</span>
+          <div>
+            <small>Call or WhatsApp</small>
+            <b>8509549177</b>
+          </div>
+        </div>
+        <button class="logout-btn" id="adminLogout">Sign Out ⎋</button>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">☰</button>
+        <div>
+          <div class="eyebrow" id="pageEyebrow">YOUR CAFÉ AT A GLANCE</div>
+          <h1 id="pageTitle">Good afternoon, AURA BITE <span>✦</span></h1>
+        </div>
+        <div class="topbar-right">
+          <div class="live-date">
+            <span class="live-dot"></span>
+            <div><b id="currentTime">--:--</b><small id="currentDate">Loading date...</small></div>
+          </div>
+          <button class="primary-btn" id="topNewBill">＋ <span>New Bill</span></button>
+          <button class="outline-btn" id="btnPreviewCustomerPage">Customer View ↗</button>
+        </div>
+      </header>
+
+      <!-- VIEW: DASHBOARD -->
+      <section class="view active" id="dashboardView">
+        <div class="welcome-banner">
+          <div>
+            <span class="banner-kicker">FRESH FOOD, FRIENDLY VIBES</span>
+            <h2>Make every order<br><em>a little brighter.</em></h2>
+            <p>Billing, daily sales figures, and café menu — all in one place.</p>
+            <button class="light-btn" data-goto="billing">Start Counter Bill ↗</button>
+          </div>
+          <div class="banner-art" aria-hidden="true">
+            <div class="sun"></div>
+            <div class="plate">
+              <div class="toast toast-one"></div>
+              <div class="toast toast-two"></div>
+              <div class="leaf">✦</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-heading">
+          <div><span class="eyebrow">OVERVIEW</span><h2>Business Sales Snapshot</h2></div>
+          <span class="date-chip" id="todayChip">Today</span>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card stat-green">
+            <div class="stat-top"><span>Today's Total Sales</span><span class="stat-icon">₹</span></div>
+            <strong id="todaySales">₹0</strong>
+            <small><span class="trend">↗</span> Counter + Online orders</small>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span>This Month</span><span class="stat-icon gold">◷</span></div>
+            <strong id="monthSales">₹0</strong>
+            <small>Total revenue this month</small>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span>Total Bills</span><span class="stat-icon lavender">▤</span></div>
+            <strong id="allBills">0</strong>
+            <small>Generated invoices</small>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span>Average Ticket</span><span class="stat-icon peach">↗</span></div>
+            <strong id="averageBill">₹0</strong>
+            <small>Average sales per bill</small>
+          </article>
+        </div>
+
+        <div class="split-grid">
+          <article class="panel payment-panel">
+            <div class="panel-heading">
+              <div><span class="eyebrow">PAYMENT MIX</span><h3>How Customers Paid</h3></div>
+              <span class="round-icon">◉</span>
+            </div>
+            <div class="payment-content">
+              <div class="donut" id="paymentDonut">
+                <div><b id="paidTotal">₹0</b><small>Total Collected</small></div>
+              </div>
+              <div class="payment-legend">
+                <div><i class="legend-dot cash"></i><span>Cash</span><b id="cashSales">₹0</b></div>
+                <div><i class="legend-dot online"></i><span>Online / UPI</span><b id="onlineSales">₹0</b></div>
+                <div><i class="legend-dot card"></i><span>Card</span><b id="cardSales">₹0</b></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel quick-panel">
+            <div class="panel-heading">
+              <div><span class="eyebrow">QUICK ACTIONS</span><h3>Common Operations</h3></div>
+            </div>
+            <div class="quick-actions">
+              <button data-goto="billing">
+                <span class="quick-icon q-green">＋</span>
+                <span><b>Create New Bill</b><small>Take walk-in customer orders</small></span>
+                <span class="arrow">↗</span>
+              </button>
+              <button data-goto="bills">
+                <span class="quick-icon q-gold">▤</span>
+                <span><b>Find Past Invoices</b><small>Search by bill number or phone</small></span>
+                <span class="arrow">↗</span>
+              </button>
+              <button data-goto="products">
+                <span class="quick-icon q-purple">◈</span>
+                <span><b>Manage Food Items</b><small>Add items, change prices or photos</small></span>
+                <span class="arrow">↗</span>
+              </button>
+            </div>
+          </article>
+        </div>
+
+        <article class="panel recent-panel">
+          <div class="panel-heading">
+            <div><span class="eyebrow">LATEST ACTIVITY</span><h3>Recent Completed Bills</h3></div>
+            <button class="text-btn" data-goto="bills">View All Bills ↗</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Bill No.</th>
+                  <th>Customer</th>
+                  <th>Source</th>
+                  <th>Date & Time</th>
+                  <th>Payment</th>
+                  <th>Total Amount</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="recentBillsBody">
+                <tr><td colspan="7" class="empty-cell">No bills saved yet.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <!-- VIEW: BILLING -->
+      <section class="view" id="billingView">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">COUNTER POS</span>
+            <h2>Create New Bill</h2>
+            <p class="section-sub">Tap items to add, select payment method, and generate instant invoice.</p>
+          </div>
+          <span class="date-chip" id="billDateChip"></span>
+        </div>
+
+        <div class="billing-layout">
+          <div class="menu-column">
+            <div class="menu-search">
+              <span>⌕</span>
+              <input id="menuSearch" placeholder="Search food or beverage..." />
+              <span class="shortcut">MENU</span>
+            </div>
+            <div id="categoryAccordion" class="category-accordion"></div>
+          </div>
+
+          <aside class="cart-panel panel">
+            <div class="cart-title">
+              <div><span class="eyebrow">ACTIVE ORDER</span><h3>Current Bill <span id="cartCount" class="count-pill">0</span></h3></div>
+              <button class="icon-btn" id="clearCart" title="Clear order">↻</button>
+            </div>
+            <div id="cartItems" class="cart-items">
+              <div class="cart-empty">
+                <span>🧾</span>
+                <b>Your bill is empty</b>
+                <small>Select food items from the left menu.</small>
+              </div>
+            </div>
+            <div class="cart-total">
+              <div><span>Subtotal</span><b id="cartSubtotal">₹0</b></div>
+              <div class="total-line"><span>Total Payable</span><strong id="cartTotal">₹0</strong></div>
+            </div>
+            <button class="primary-btn full-btn" id="checkoutBtn">Proceed to Checkout <span>→</span></button>
+          </aside>
+        </div>
+      </section>
+
+      <!-- VIEW: SAVED BILLS -->
+      <section class="view" id="billsView">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">INVOICE ARCHIVE</span>
+            <h2>Saved Bills History</h2>
+          </div>
+          <button class="primary-btn" data-goto="billing">＋ New Bill</button>
+        </div>
+        <div class="panel bills-panel">
+          <div class="filters-row">
+            <label class="search-field">
+              <span>⌕</span>
+              <input id="billSearch" placeholder="Search bill no., customer name, or phone..." />
+            </label>
+            <select id="sourceFilter">
+              <option value="">All Orders (Shop + Online)</option>
+              <option value="Shop">Shop Walk-in</option>
+              <option value="Online">Online Order</option>
+            </select>
+            <select id="paymentFilter">
+              <option value="">All Payment Methods</option>
+              <option>Cash</option>
+              <option>Online</option>
+              <option>Card</option>
+            </select>
+            <select id="billDateFilter">
+              <option value="all">All Dates</option>
+              <option value="today">Today Only</option>
+              <option value="month">This Month</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Bill No.</th>
+                  <th>Customer</th>
+                  <th>Source</th>
+                  <th>Phone</th>
+                  <th>Date & Time</th>
+                  <th>Payment</th>
+                  <th>Total</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="allBillsBody">
+                <tr><td colspan="8" class="empty-cell">No matching bills found.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW: MENU MANAGEMENT -->
+      <section class="view" id="productsView">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">CAFÉ MENU CONTROL</span>
+            <h2>Menu & Food Products</h2>
+            <p class="section-sub">Add or edit dishes, update prices or images. Changes reflect live on the online customer page.</p>
+          </div>
+          <button class="primary-btn" id="addProductBtn">＋ Add Food Item</button>
+        </div>
+        <div class="product-toolbar panel">
+          <label class="search-field">
+            <span>⌕</span>
+            <input id="productSearch" placeholder="Find product by name..." />
+          </label>
+          <select id="productCategoryFilter"><option value="">All Categories</option></select>
+          <span class="product-count" id="productCount">0 items</span>
+        </div>
+        <div class="product-grid" id="productGrid"></div>
+      </section>
+
+      <!-- VIEW: ONLINE ORDER LINK -->
+      <section class="view" id="ordersView">
+        <div class="section-heading">
+          <div><span class="eyebrow">ORDER LINK</span><h2>Customer Ordering Link</h2></div>
+        </div>
+        <div class="panel share-panel">
+          <div class="share-icon">↗</div>
+          <div class="share-copy">
+            <h3>Share Menu Link with Customers</h3>
+            <p>Customers can view your digital menu, build their tray, and send orders straight to your WhatsApp.</p>
+            <div class="link-preview" id="orderLinkPreview">AURA BITE Customer Ordering Menu</div>
+          </div>
+          <button class="primary-btn" id="btnLaunchCustomer">Open Customer Menu ↗</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- 4. CUSTOMER ORDERING PAGE -->
+  <section class="customer-page" id="customerPage">
+    <header class="customer-top">
+      <button class="back-link" id="closeCustomerPage">← Back to Portal</button>
+      <div class="brand customer-brand">
+        <div class="brand-mark">A<span>✦</span></div>
+        <div>
+          <div class="brand-name">AURA BITE</div>
+          <div class="brand-caption">GOOD FOOD • HAPPY MOOD</div>
+        </div>
+      </div>
+      <a href="https://wa.me/918509549177" target="_blank" rel="noreferrer" class="customer-call">☏ WhatsApp Chat</a>
+    </header>
+
+    <div class="customer-banner">
+      <div>
+        <span class="banner-kicker">FUEL YOUR CAMPUS LIFE, ONE BITE AT A TIME!</span>
+        <h1>Fresh Food.<br><em>Good Mood.</em></h1>
+        <p>Delicious food crafted freshly with clean ingredients at student-friendly prices.</p>
+        <span class="customer-location">⌖ Baligori, Newtown, Kolkata 700160</span>
+      </div>
+    </div>
+
+    <div class="customer-layout">
+      <main>
+        <div class="customer-menu-head">
+          <div>
+            <span class="eyebrow">MADE FRESH FOR YOU</span>
+            <h2>Explore Our Menu</h2>
+          </div>
+          <label class="search-field">
+            <span>⌕</span>
+            <input id="customerSearch" placeholder="Search delicious food..." />
+          </label>
+        </div>
+        <div id="customerMenu" class="customer-menu"></div>
+      </main>
+
+      <aside class="customer-cart panel">
+        <div class="cart-title">
+          <div><span class="eyebrow">YOUR TRAY</span><h3>Shopping Cart <span id="customerCartCount" class="count-pill">0</span></h3></div>
+        </div>
+        <div id="customerCartItems" class="cart-items">
+          <div class="cart-empty">
+            <span>🛍️</span>
+            <b>Your tray is empty</b>
+            <small>Add something delicious from our menu!</small>
+          </div>
+        </div>
+        <div class="cart-total">
+          <div class="total-line"><span>Order Total</span><strong id="customerCartTotal">₹0</strong></div>
+        </div>
+        <button class="primary-btn full-btn" id="customerCheckout">Proceed to Details →</button>
+        <small class="delivery-note">Takeaway pickup or delivery within 2 km radius.</small>
+      </aside>
+    </div>
+  </section>
+
+  <!-- MODALS -->
+  <!-- Payment Checkout Modal (Staff/Admin) -->
+  <div class="modal-backdrop" id="paymentModal">
+    <div class="modal modal-medium">
+      <button class="modal-close" data-close="paymentModal" aria-label="Close">×</button>
+      <span class="eyebrow">FINAL STEP</span>
+      <h2>Complete This Bill</h2>
+      <p class="modal-sub">Customer name and phone number are optional for walk-in counter orders.</p>
+      <form id="paymentForm">
+        <div class="form-grid">
+          <label>Order Source
+            <select id="billSource">
+              <option value="Shop">Shop Walk-in</option>
+              <option value="Online">Online / Parcel Order</option>
+            </select>
+          </label>
+          <label>Payment Method
+            <select id="paymentMethod" required>
+              <option value="Cash">Cash</option>
+              <option value="Online">Online / UPI (GPay/PhonePe)</option>
+              <option value="Card">Debit / Credit Card</option>
+            </select>
+          </label>
+        </div>
+        <div class="form-grid">
+          <label>Customer Name <span>(Optional)</span>
+            <input id="customerName" placeholder="e.g. Rahul Das" />
+          </label>
+          <label>Phone Number <span>(Optional)</span>
+            <input id="customerPhone" inputmode="tel" placeholder="10-digit mobile number" />
+          </label>
+        </div>
+        <div class="checkout-total">
+          <span>Total Payable</span>
+          <strong id="checkoutTotal">₹0</strong>
+        </div>
+        <button class="primary-btn full-btn" type="submit">Save Bill & Generate Invoice <span>→</span></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Product Add/Edit Modal -->
+  <div class="modal-backdrop" id="productModal">
+    <div class="modal">
+      <button class="modal-close" data-close="productModal" aria-label="Close">×</button>
+      <span class="eyebrow">MENU ITEM</span>
+      <h2 id="productModalTitle">Add Product</h2>
+      <form id="productForm">
+        <input type="hidden" id="editProductId" />
+        <label>Food Item Name
+          <input id="productName" required placeholder="e.g. Grilled Paneer Sandwich" />
+        </label>
+        <div class="form-grid">
+          <label>Category
+            <select id="productCategory" required></select>
+          </label>
+          <label>Price (₹)
+            <input id="productPrice" required type="number" min="0" step="1" placeholder="40" />
+          </label>
+        </div>
+        <div class="form-grid">
+          <label>Unit / Portion
+            <input id="productUnit" placeholder="e.g. 2 slices, 1 plate" />
+          </label>
+          <label>Photo URL
+            <input id="productImage" placeholder="https://..." />
+          </label>
+        </div>
+        <label>Or Upload Photo from Device
+          <input id="productImageFile" type="file" accept="image/*" />
+        </label>
+        <button class="primary-btn full-btn" type="submit">Save Food Item <span>✓</span></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Printable Invoice Modal -->
+  <div class="modal-backdrop" id="invoiceModal">
+    <div class="modal invoice-modal">
+      <button class="modal-close" data-close="invoiceModal" aria-label="Close">×</button>
+      <div id="invoiceContent"></div>
+      <div class="invoice-actions">
+        <button class="outline-btn" id="invoiceWhatsApp">Share via WhatsApp</button>
+        <button class="primary-btn" id="printInvoice">Print Invoice 🖨️</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Customer WhatsApp Details Modal -->
+  <div class="modal-backdrop" id="customerDetailsModal">
+    <div class="modal">
+      <button class="modal-close" data-close="customerDetailsModal" aria-label="Close">×</button>
+      <span class="eyebrow">ORDER DETAILS</span>
+      <h2>Where should we prepare your order?</h2>
+      <form id="customerDetailsForm">
+        <label>Full Name
+          <input id="orderCustomerName" required placeholder="Enter your full name" />
+        </label>
+        <div class="form-grid">
+          <label>Phone Number
+            <input id="orderCustomerPhone" required inputmode="tel" placeholder="Mobile number" />
+          </label>
+          <label>Order Type
+            <select id="orderType">
+              <option value="Pickup from shop">Takeaway / Pickup</option>
+              <option value="Home delivery">Home Delivery</option>
+            </select>
+          </label>
+        </div>
+        <label>Delivery Address <span id="addressOptional">(Not needed for pickup)</span>
+          <textarea id="orderAddress" rows="2" placeholder="Hostel / Flat / Landmark details"></textarea>
+        </label>
+        <label>Payment Preference
+          <select id="orderPayment">
+            <option>Cash on Delivery / Counter</option>
+            <option>Online UPI (GPay / PhonePe / Paytm)</option>
+          </select>
+        </label>
+        <label>Special Instructions <span>(Optional)</span>
+          <textarea id="orderNotes" rows="2" placeholder="e.g. Less spicy, call when ready..."></textarea>
+        </label>
+        <div class="checkout-total">
+          <span>Order Total</span>
+          <strong id="customerCheckoutTotal">₹0</strong>
+        </div>
+        <button class="primary-btn full-btn" type="submit">Send WhatsApp Order Request ↗</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast-message"></div>
+
+  <script src="script.js"></script>
+  <script src="upgrade.js"></script>
+</body>
+</html>

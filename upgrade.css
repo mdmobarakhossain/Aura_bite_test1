@@ -1,0 +1,17 @@
+/* AURA BITE upgrade layer: orange brand, split payments, print sizes */
+:root{--green:#f26a1b;--green-hover:#d95a10;--mint:#fff1e6;--cream:#fff8ef;--paper:#fffdf9;--gold:#f5b324;--gold-light:#fff3cf;--ink:#33261c;--line:#f3e6d8;--shadow:0 10px 30px rgba(242,106,27,.12)}
+body{background:#fff8ef}
+.stats-grid{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+button{transition:transform .12s ease,box-shadow .2s ease}button:active{transform:scale(.96)}
+.st{display:inline-block;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700}
+.st-Paid{background:#dff5e3;color:#1c7a34}.st-Partial{background:#fff0c2;color:#9a6a00}.st-Due{background:#fde1e1;color:#c0392b}
+.payment-badge.due{background:#fde1e1;color:#c0392b}
+.due-note{display:block;font-size:11px;color:#c0392b;font-weight:700;margin-top:2px}
+.pay-sum{display:flex;gap:8px;margin:10px 0}.pay-sum div{flex:1;background:var(--mint);border-radius:12px;padding:8px 10px;font-size:12px}.pay-sum b{display:block;font-size:16px}
+.pay-hist{font-size:12px;margin:8px 0;max-height:120px;overflow:auto}.pay-hist div{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed var(--line)}
+.inv-sum{margin-left:auto;width:230px;font-size:12px}.inv-sum div{display:flex;justify-content:space-between;padding:2px 0}
+.inv-sum .gt{font-size:16px;font-weight:800;color:var(--green);border-top:1px dashed #ccc;margin-top:4px;padding-top:6px}
+.inv-sum .due{color:#c0392b;font-weight:800}
+body.thermal .invoice-modal{width:74mm!important;font-size:11px!important}
+body.thermal .inv-sum{width:100%}
+@media(max-width:700px){.table-wrap table,.table-wrap tbody,.table-wrap tr,.table-wrap td{display:block;width:100%}.table-wrap thead{display:none}.table-wrap tr{background:#fff;border-radius:14px;margin-bottom:10px;padding:8px;box-shadow:var(--shadow)}.table-wrap td{border:0;padding:4px 8px}}
